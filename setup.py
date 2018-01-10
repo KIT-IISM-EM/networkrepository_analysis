@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='networkrepository_analysis',
-    version='0.1',
+    version='0.1.1',
     packages=[''],
     url='https://github.com/FabianBall/networkrepository_analysis',
     license='MIT',

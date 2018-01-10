@@ -54,11 +54,11 @@ class EdgesReader(object):
     EDGE_LIST_PATTERN = r'^(?P<from_id>\d+)(?P<delimiter>[\s,;])(?P<to_id>\d+)((?P=delimiter)' \
                         r'(?P<weight>%s)((?P=delimiter)(?P<timestamp>%s))?)?$' % (FLOAT_PATTERN, FLOAT_PATTERN)
     HEADER_PATTERN = r'^(?P<comment_char>[%#]) (?P<graph_type>[a-zA-Z]+) (?P<weightedness>[a-zA-Z]+)$'
+    # Comment char must be inserted before usable!
     ADDITIONAL_HEADER_PATTERN = r'^%s (?P<rel_count>\d+) (?P<subj_count>\d+) (?P<obj_count>\d+)$'
 
     edge_list_pattern = re.compile(EDGE_LIST_PATTERN)
     header_pattern = re.compile(HEADER_PATTERN)
-    additional_info_pattern = re.compile(ADDITIONAL_HEADER_PATTERN)
 
     def __init__(self, valid_graph_types):
         self.state = EdgesReader.States.BEGIN
@@ -207,7 +207,7 @@ class EdgesReader(object):
         self.state = EdgesReader.States.ADDITIONAL_HEADER
 
     def read_additional_header(self, line):
-        additional_info_pattern = self.additional_info_pattern % self.comment_char
+        additional_info_pattern = self.ADDITIONAL_HEADER_PATTERN % self.comment_char
 
         matches = re.match(additional_info_pattern, line)
 
