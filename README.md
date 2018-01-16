@@ -31,5 +31,5 @@ require additional information as command line parameters. For each script,
 the `--help` option is available.
 
 ## References
-> Symmetry Analysis of Real-World Graphs, F. Ball and A. Geyer-Schulz, 
-> *to appear*
+> Ball, Fabian, and Andreas Geyer-Schulz. 2018. “How Symmetric Are Real-World Graphs? A Large-Scale Study.” Symmetry 10 (1):17. https://doi.org/10.3390/sym10010029.
+
