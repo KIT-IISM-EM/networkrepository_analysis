@@ -6,8 +6,8 @@ networkrepository.com for graph automorphisms
 No installation is needed but you must assure that all required packages are
 available on yout system. `python setup.py --requires` shows the packages.
 Most of them can be obtained using standard Python mechanisms for packages.
-[pysaucy](https://github.com/FabianBall/pysaucy) and 
-[pycggcrg](https://github.com/FabianBall/pycggcrg) need to be obtained 
+[pysaucy](https://github.com/KIT-IISM-EM/pysaucy) and 
+[pycggcrg](https://github.com/KIT-IISM-EM/pycggcrg) need to be obtained 
 separately, please follow their installation instructions.
 
 All scripts were tested using Python 2.7, however, they should be compatible
