@@ -6,8 +6,8 @@ networkrepository.com for graph automorphisms
 No installation is needed but you must assure that all required packages are
 available on yout system. `python setup.py --requires` shows the packages.
 Most of them can be obtained using standard Python mechanisms for packages.
-[pysaucy](https://github.com/FabianBall/pysaucy) and 
-[pycggcrg](https://github.com/FabianBall/pycggcrg) need to be obtained 
+[pysaucy](https://github.com/KIT-IISM-EM/pysaucy) and 
+[pycggcrg](https://github.com/KIT-IISM-EM/pycggcrg) need to be obtained 
 separately, please follow their installation instructions.
 
 All scripts were tested using Python 2.7, however, they should be compatible
@@ -31,5 +31,5 @@ require additional information as command line parameters. For each script,
 the `--help` option is available.
 
 ## References
-> Symmetry Analysis of Real-World Graphs, F. Ball and A. Geyer-Schulz, 
-> *to appear*
+> Ball, Fabian, and Andreas Geyer-Schulz. 2018. “How Symmetric Are Real-World Graphs? A Large-Scale Study.” Symmetry 10 (1):17. https://doi.org/10.3390/sym10010029.
+
