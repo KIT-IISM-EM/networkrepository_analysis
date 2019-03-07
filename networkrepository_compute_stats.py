@@ -159,6 +159,10 @@ def transform_merged_df(df):
     df['redundancy_m'] = (df['num_orbits'] - 1) / df['n']  # Add the 'network redundancy'
     df['redundancy'] = 1 - (df['num_orbits'] - 1) / (df['n'] - 1)  # Add the normalized 'network redundancy'
 
+    # Drop within-class duplicates
+    # Use only for simplified analysis including duplicates (used for scatter of r_G' and Type)
+    # df.drop_duplicates(['Type', 'n', 'm', 'num_orbits', 'num_generators', 'aut_group_size'], inplace=True)
+
     return df
 
 
@@ -384,6 +388,12 @@ def create_scatterplots(df, args):
 
     # ax.legend()
     fig.tight_layout()
+    ax.plot([0, 1], [1, 0],
+            linestyle='-.',
+            color=list(plt.rcParams['axes.prop_cycle'])[1]['color'],
+            alpha=0.7,
+            # label='${0} = {1}$'.format(COL_NAMES['avg_cluster_size'][2:-2], COL_NAMES['max_group_support'][2:-2])
+            )
 
     fig.savefig(os.path.join(args.target_dir, 'networkrepository_scatter_Q_rho.pgf'))
     plt.close()
@@ -396,7 +406,8 @@ def create_scatterplots(df, args):
 
     fig = plt.figure()
     ax = plt.subplot('111')
-    paths = ax.scatter(df['redundancy'], df['Type'].apply(lambda t: -type_dict[t]), s=20, marker='.', linewidth=0)
+    paths = ax.scatter(df['redundancy'], df['Type'].apply(lambda t: -type_dict[t]),
+                       s=15, marker='.', linewidth=0, c='b')
 
     ax.set_xlabel("$r_G'$")
     ax.set_ylabel("Type")
@@ -432,7 +443,7 @@ def create_histogram_logx(df, attr, bins, latex=True):
 
     # Add the histogram plot for symmetric graphs
     plt.hist(df[(df['n'] > df['num_orbits']) & ~df['num_orbits'].isnull()][attr], bins=bins, log=True,
-             label="{} for symmetric graphs".format(attr_output))
+             label="{} for symmetric graphs".format(attr_output), hatch='//')
 
     ax1.set_xlabel(attr_output)
     ax1.set_ylabel("Frequency")
@@ -442,7 +453,7 @@ def create_histogram_logx(df, attr, bins, latex=True):
 
     ax2 = plt.subplot2grid((4, 1), (2, 0))
     ax2.set_xscale('symlog')
-    plt.boxplot(df[~df['num_orbits'].isnull()][attr], vert=False, widths=.8, sym='b|')
+    plt.boxplot(df[~df['num_orbits'].isnull()][attr], vert=False, widths=.8)
     ax2.yaxis.set_ticklabels([])
     ax2.set_xlim(*xlim)
     ax2.set_ylim(.4, 1.6)
@@ -452,7 +463,7 @@ def create_histogram_logx(df, attr, bins, latex=True):
     ax3.set_xscale('symlog')
     df2 = df[(df['n'] > df['num_orbits']) & ~df['num_orbits'].isnull()]
     df2.index = list(range(len(df2)))
-    plt.boxplot(df2[attr], vert=False, widths=.8, sym='b|')
+    plt.boxplot(df2[attr], vert=False, widths=.8)
     ax3.yaxis.set_ticklabels([])
     ax3.set_xlim(*xlim)
     ax3.set_ylim(.4, 1.6)
@@ -483,7 +494,7 @@ def create_histogram_and_boxplot(df, attr, num_bins=20, rng=(0, 1), margin=0.02,
 
     # Add the histogram plot for symmetric graphs
     plt.hist(df[(df['n'] > df['num_orbits']) & ~df['num_orbits'].isnull()][attr], bins=bins,
-             label="{} for symmetric graphs".format(attr_name))
+             label="{} for symmetric graphs".format(attr_name), hatch='//')
 
     ax1.set_xlabel(xlabel)
     ax1.set_ylabel("Frequency")
@@ -492,7 +503,7 @@ def create_histogram_and_boxplot(df, attr, num_bins=20, rng=(0, 1), margin=0.02,
     ax1.tick_params(labelright=True)
 
     ax2 = plt.subplot2grid((4, 1), (2, 0))
-    plt.boxplot(df[~df['num_orbits'].isnull()][attr], vert=False, widths=.8, sym='b|')
+    plt.boxplot(df[~df['num_orbits'].isnull()][attr], vert=False, widths=.8)
     ax2.yaxis.set_ticklabels([])
     ax2.set_xlim(*xlim)
     ax2.set_ylim(.4, 1.6)
@@ -501,7 +512,7 @@ def create_histogram_and_boxplot(df, attr, num_bins=20, rng=(0, 1), margin=0.02,
     ax3 = plt.subplot2grid((4, 1), (3, 0))
     df2 = df[(df['n'] > df['num_orbits']) & ~df['num_orbits'].isnull()]
     df2.index = list(range(len(df2)))
-    plt.boxplot(df2[attr], vert=False, widths=.8, sym='b|')
+    plt.boxplot(df2[attr], vert=False, widths=.8)
     ax3.yaxis.set_ticklabels([])
     ax3.set_xlim(*xlim)
     ax3.set_ylim(.4, 1.6)
@@ -577,8 +588,7 @@ def create_histograms(df, args):
     ax1.tick_params(labelright=True)
 
     ax2 = plt.subplot2grid((3, 1), (2, 0))
-    plt.boxplot(df[~df['num_orbits'].isnull()]['redundancy'], vert=False, widths=.8, sym='b|')
-    # plt.boxplot(df[~df['num_orbits'].isnull()]['redundancy_m'], vert=False, widths=.8, sym='b|')
+    plt.boxplot(df[~df['num_orbits'].isnull()]['redundancy'], vert=False, widths=.8)
     ax2.yaxis.set_ticklabels([])
     ax2.set_xlim(-.02, 1.02)
     ax2.set_ylim(.4, 1.6)
@@ -587,7 +597,6 @@ def create_histograms(df, args):
     fig.tight_layout()
 
     plt.savefig(os.path.join(args.target_dir, 'networkrepository_hist_redundancy.pgf'))
-    # plt.savefig(os.path.join(args.target_dir, 'networkrepository_hist_redundancy_m.pgf'))
     plt.close()
 
 
